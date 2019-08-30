@@ -40,7 +40,7 @@ main:
 	li $v0,10 # system call 10; exit
 	syscall
 .data
-MSG1: .asciiz "Enter the 1st number => "
+MSG1: .asciiz "Enter the 1st number => This is a git test "
 MSG2: .asciiz "Enter the 2nd number => "
 SUM: .asciiz "Integer1 + Integer2 = "
 SUB: .asciiz "Integer1 - Integer2 = "
