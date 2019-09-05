@@ -23,6 +23,7 @@ COUT1:	.word 10
 COUT2:	.word 5
 COUT3:	.word 17
 INDEX:	.word 1
+TEMP:	.space 4
 
 	.text
 	.globl main
@@ -35,7 +36,10 @@ main:
 FOR1:
 	lw   $t0, INDEX		# Sum = 1
 	lw   $t1, COUT1		# Load C into t0
-	lw   $a0, INDEX
+	addi $t2, $t0, -1
+	sll  $t2, $t2, 2
+	sw   $t2, TEMP
+	lw   $a0, TEMP
 	li   $v0, 1
 	syscall
 	li   $v0, 4
@@ -54,14 +58,17 @@ FOR1:
 
 REV1:
 	lw   $t1, COUT1		# Load C into t0
-	lw   $a0, COUT1
-	addi $t1, $t1, -1	# INPUT + 1
-	sw   $t1, COUT1		# Store new Sum
+	addi $t2, $t1, -1
+	sll  $t2, $t2, 2
+	sw   $t2, TEMP
+	lw   $a0, TEMP
 	li   $v0, 1
 	syscall
 	li   $v0, 4
 	la   $a0, SPACE
 	syscall
+	addi $t1, $t1, -1	# INPUT + 1
+	sw   $t1, COUT1		# Store new Sum
 	bgt  $t1, $t0, REV1
 	
 	li   $v0, 4		# Call: Print String
@@ -107,6 +114,8 @@ REV2:
 	syscall
 	bne  $t1, $t0, REV2
 
+	li   $t0, 1
+	sw   $t0, INDEX
 
 	li   $v0, 4		# Call: Print String
 	la   $a0, MSG5		# load MSG1
