@@ -81,7 +81,10 @@ REV1:
 FOR2:
 	lw   $t0, INDEX		# Sum = 1
 	lw   $t1, COUT2		# Load C into t0
-	lw   $a0, INDEX
+	addi $t2, $t0, -1
+	sll  $t2, $t2, 2
+	sw   $t2, TEMP
+	lw   $a0, TEMP
 	li   $v0, 1
 	syscall
 	li   $v0, 4
@@ -104,14 +107,17 @@ FOR2:
 
 REV2:
 	lw   $t1, COUT2		# Load C into t0
-	lw   $a0, COUT2
-	addi $t1, $t1, -1	# INPUT + 1
-	sw   $t1, COUT2		# Store new Sum
+	addi $t2, $t1, -1
+	sll  $t2, $t2, 2
+	sw   $t2, TEMP
+	lw   $a0, TEMP
 	li   $v0, 1
 	syscall
 	li   $v0, 4
 	la   $a0, SPACE
 	syscall
+	addi $t1, $t1, -1	# INPUT + 1
+	sw   $t1, COUT2		# Store new Sum
 	bne  $t1, $t0, REV2
 
 	li   $t0, 1
@@ -124,7 +130,10 @@ REV2:
 FOR3:
 	lw   $t0, INDEX		# Sum = 1
 	lw   $t1, COUT3		# Load C into t0
-	lw   $a0, INDEX
+	addi $t2, $t0, -1
+	sll  $t2, $t2, 2
+	sw   $t2, TEMP
+	lw   $a0, TEMP
 	li   $v0, 1
 	syscall
 	li   $v0, 4
@@ -143,14 +152,17 @@ FOR3:
 
 REV3:
 	lw   $t1, COUT3		# Load C into t0
-	lw   $a0, COUT3
-	addi $t1, $t1, -1	# INPUT + 1
-	sw   $t1, COUT3		# Store new Sum
+	addi $t2, $t1, -1
+	sll  $t2, $t2, 2
+	sw   $t2, TEMP
+	lw   $a0, TEMP
 	li   $v0, 1
 	syscall
 	li   $v0, 4
 	la   $a0, SPACE
 	syscall
+	addi $t1, $t1, -1	# INPUT + 1
+	sw   $t1, COUT3		# Store new Sum
 	bgt  $t1, $t0, REV3
 	
 	li   $v0, 4		# Call: Print String
