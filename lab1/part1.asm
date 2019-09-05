@@ -26,22 +26,22 @@ main:
       
 	li   $v0, 5		# Call: Read Integer
 	syscall			# Input
-      
-	sw   $v0, INPUT		# N = Input
-	lw   $a0, INPUT		# a0 = N
-	beq  $a0, 1, END	# if N == 1 goto result
-	li   $t1, 1		# Sum = 1
+	sw   $v0, INPUT		# Store in Input
+	
+	lw   $a0, INPUT		# A0 = INPUT
+	beq  $a0, 1, END	# if INPUT == 1 goto END
+	li   $t1, 1		# SUM = 1
 LOOP:	
-	lw   $t0, COUNT		# Load C into t0
-	addi $t0, $t0, 1	# C = C + 1
-	sw   $t0, COUNT		# Store new C
+	lw   $t0, COUNT		# T0 = COUNT
+	addi $t0, $t0, 1	# COUNT += 1
+	sw   $t0, COUNT		# Store new COUNT
 	
-	add  $t1, $t1, $t0	# Add C to Sum
-	sw   $t1, SUM		# Store new Sum
+	add  $t1, $t1, $t0	# Add T1 = SUM + COUNT
+	sw   $t1, SUM		# Store new SUM
 	
-	lw   $a0, INPUT		# Load N into a0
-	lw   $a1, COUNT		# Load C into a1
-	beq  $a0, $a1, END	# Branch if N == C 
+	lw   $a0, INPUT		# A0 = INPUT
+	lw   $a1, COUNT		# A1 = COUNT
+	beq  $a0, $a1, END	# if INPUT == COUNT 
 	j LOOP			# else loop
 
 END:
@@ -50,7 +50,7 @@ END:
 	syscall			# Output
 	
 	li   $v0, 1		# Call: Print Integer
-	lw   $a0, INPUT		# A0 == N
+	lw   $a0, INPUT		# A0 == INPUT
 	syscall			# Output
 	
 	li   $v0, 4		# Call: Print String
