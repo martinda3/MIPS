@@ -1,7 +1,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Author: Dajion Martin
 # Assignment: Lab 1. Part 2
-# Notes: Implement Part 1 w/o using loops.
+# Notes: Implement Part 1 w/o using loops. (20 pts)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 	.data
 MSG1: 	.asciiz "Enter a value for N: "
