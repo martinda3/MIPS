@@ -15,9 +15,9 @@ SPACE:	.asciiz ", "
 	
 	.align 2
 
-ARRY1:	.word 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
-ARRY2:	.word 0, 2, 4, 6, 8
-ARRY3:	.word 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
+ARRY1:	.word 10, -1, -2, -3, -4, -5, -6, -7, -8, -9
+ARRY2:	.word 10, -2, -4, -6, -8
+ARRY3:	.word 17, 16, 15, 14, 13, 12, 11, 10, -9, -8, -7, -6, -5, -4, 33, 42, 71, 11
 
 COUT1:	.word 10
 COUT2:	.word 5
@@ -28,47 +28,51 @@ TEMP:	.space 4
 	.text
 	.globl main
 
-main: 
+main:				# Code for FOR 1-3 & REV 1-3 same 
 	li   $v0, 4		# Call: Print String
 	la   $a0, MSG1		# load MSG1
 	syscall			# Output
      
 FOR1:
-	lw   $t0, INDEX		# Sum = 1
-	lw   $t1, COUT1		# Load C into t0
-	addi $t2, $t0, -1
-	sll  $t2, $t2, 2
-	sw   $t2, TEMP
-	lw   $a0, TEMP
-	li   $v0, 1
-	syscall
-	li   $v0, 4
-	la   $a0, SPACE
-	syscall
-	addi $t0, $t0, 1	# INPUT + 1
-	sw   $t0, INDEX		# Store new Sum
-	bge  $t1, $t0, FOR1
+	lw   $t0, INDEX		# INDEX = position in array
+	lw   $t1, COUT1		# COUNT = Number of Values on array
+	addi $t2, $t0, -1	# Itterating Index
+	sll  $t2, $t2, 2	# Mulitpying Index by 4 = address of Index
+	sw   $t2, TEMP		# Storing address of index
+	la   $t3, ARRY1		# Base address of array
+	add  $t4, $t3, $t2	# Adding Base address and address of index
+	lw   $a0, 0($t4)	# Loading value at address of index
+	li   $v0, 1		# Call: Print Integer
+	syscall			# Output
+	li   $v0, 4		# Call: Print String
+	la   $a0, SPACE		# Formatting
+	syscall			# Output
+	addi $t0, $t0, 1	# Advance to next position in array
+	sw   $t0, INDEX		# Store new position
+	bge  $t1, $t0, FOR1	# Check for all values in array
 
-	li   $t0, 0
-	sw   $t0, INDEX
+	li   $t0, 0		# Reset position
+	sw   $t0, INDEX		# Store new position
 	
 	li   $v0, 4		# Call: Print String
-	la   $a0, MSG2		# load MSG1
+	la   $a0, MSG2		# load MSG2
 	syscall			# Output
 
 REV1:
-	lw   $t1, COUT1		# Load C into t0
+	lw   $t1, COUT1
 	addi $t2, $t1, -1
 	sll  $t2, $t2, 2
 	sw   $t2, TEMP
-	lw   $a0, TEMP
+	la   $t3, ARRY1
+	add  $t4, $t3, $t2
+	lw   $a0, 0($t4)
 	li   $v0, 1
 	syscall
 	li   $v0, 4
 	la   $a0, SPACE
 	syscall
-	addi $t1, $t1, -1	# INPUT + 1
-	sw   $t1, COUT1		# Store new Sum
+	addi $t1, $t1, -1
+	sw   $t1, COUT1	
 	bgt  $t1, $t0, REV1
 	
 	li   $v0, 4		# Call: Print String
@@ -79,19 +83,21 @@ REV1:
 	sw   $t0, INDEX
  
 FOR2:
-	lw   $t0, INDEX		# Sum = 1
-	lw   $t1, COUT2		# Load C into t0
+	lw   $t0, INDEX
+	lw   $t1, COUT2
 	addi $t2, $t0, -1
 	sll  $t2, $t2, 2
 	sw   $t2, TEMP
-	lw   $a0, TEMP
+	la   $t3, ARRY2
+	add  $t4, $t3, $t2
+	lw   $a0, 0($t4)
 	li   $v0, 1
 	syscall
 	li   $v0, 4
 	la   $a0, SPACE
 	syscall
-	addi $t0, $t0, 1	# INPUT + 1
-	sw   $t0, INDEX		# Store new Sum
+	addi $t0, $t0, 1
+	sw   $t0, INDEX
 	bge  $t1, $t0, FOR2
 
 	li   $t0, 1
@@ -106,18 +112,20 @@ FOR2:
 	sw   $t0, INDEX
 
 REV2:
-	lw   $t1, COUT2		# Load C into t0
+	lw   $t1, COUT2
 	addi $t2, $t1, -1
 	sll  $t2, $t2, 2
 	sw   $t2, TEMP
-	lw   $a0, TEMP
+	la   $t3, ARRY2
+	add  $t4, $t3, $t2
+	lw   $a0, 0($t4)
 	li   $v0, 1
 	syscall
 	li   $v0, 4
 	la   $a0, SPACE
 	syscall
-	addi $t1, $t1, -1	# INPUT + 1
-	sw   $t1, COUT2		# Store new Sum
+	addi $t1, $t1, -1
+	sw   $t1, COUT2	
 	bne  $t1, $t0, REV2
 
 	li   $t0, 1
@@ -128,19 +136,21 @@ REV2:
 	syscall			# Output
 
 FOR3:
-	lw   $t0, INDEX		# Sum = 1
-	lw   $t1, COUT3		# Load C into t0
+	lw   $t0, INDEX
+	lw   $t1, COUT3
 	addi $t2, $t0, -1
 	sll  $t2, $t2, 2
 	sw   $t2, TEMP
-	lw   $a0, TEMP
+	la   $t3, ARRY3
+	add  $t4, $t3, $t2
+	lw   $a0, 0($t4)
 	li   $v0, 1
 	syscall
 	li   $v0, 4
 	la   $a0, SPACE
 	syscall
-	addi $t0, $t0, 1	# INPUT + 1
-	sw   $t0, INDEX		# Store new Sum
+	addi $t0, $t0, 1
+	sw   $t0, INDEX	
 	bge  $t1, $t0, FOR3
 
 	li   $t0, 0
@@ -151,18 +161,20 @@ FOR3:
 	syscall			# Output
 
 REV3:
-	lw   $t1, COUT3		# Load C into t0
+	lw   $t1, COUT3
 	addi $t2, $t1, -1
 	sll  $t2, $t2, 2
 	sw   $t2, TEMP
-	lw   $a0, TEMP
+	la   $t3, ARRY3
+	add  $t4, $t3, $t2
+	lw   $a0, 0($t4)
 	li   $v0, 1
 	syscall
 	li   $v0, 4
 	la   $a0, SPACE
 	syscall
-	addi $t1, $t1, -1	# INPUT + 1
-	sw   $t1, COUT3		# Store new Sum
+	addi $t1, $t1, -1
+	sw   $t1, COUT3	
 	bgt  $t1, $t0, REV3
 	
 	li   $v0, 4		# Call: Print String
