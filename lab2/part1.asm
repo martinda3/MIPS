@@ -5,8 +5,8 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 	.data
 MSG1:	.asciiz "Enter a character string: "
-PASS: .asciiz "\nYES!!!!!\n"
-FAIL: .asciiz "\nNO\n"
+PASS: .asciiz "\nThis is a Palidrone\n"
+FAIL: .asciiz "\nThis is not a Palidrone\n"
 EROR: .asciiz "\nError!\n"
 NEWL: .asciiz " "
 NEWD: .asciiz "\n"
@@ -74,7 +74,7 @@ ODD:
 EVEN:
 	lw   $a0, COUNT
 	li   $v0, 1
-	syscall
+	#syscall
 	li  $t0, 2
 	div $a0, $t0
 	mflo $a0
